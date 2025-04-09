@@ -1,0 +1,4 @@
+backend/models/*
+backend/uploads/*
+frontend/build/*
+frontend/node_modules/*

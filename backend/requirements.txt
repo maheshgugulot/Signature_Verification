@@ -1,0 +1,12 @@
+Flask
+Flask-SQLAlchemy
+Flask-Bcrypt
+Flask-CORS
+opencv-python
+numpy
+torch
+torchvision
+Pillow
+scikit-learn
+joblib
+flask-jwt-extended
