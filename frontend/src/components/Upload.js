@@ -71,7 +71,7 @@ const Upload = () => {
               <p><b>SVM:</b> {predictions.SVM}</p>
               <p><b>KNN:</b> {predictions.KNN}</p>
               <p><b>LSTM:</b> {predictions.LSTM}</p>
-              <p><b>Similarity Score:</b> {predictions.similarity_score}</p>
+              {predictions.similarity_score && <p><b>Similarity Score:</b> {predictions.similarity_score}</p>}
             </div>
           </div>
         )}

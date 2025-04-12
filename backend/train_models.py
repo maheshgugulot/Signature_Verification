@@ -1,16 +1,19 @@
 import torch
 import joblib
-from feature_extraction import extract_features, lstm_model
-from visualization import visualize_difference,relevance_score
+from feature_extraction import extract_features, CNNFeatureExtractor, LSTMModel
+from visualization import visualize_difference, relevance_score
 from io import BytesIO
 import base64
 from PIL import Image
+import os
 
-# Load models
 svm_model = joblib.load('models/svm_model.pkl')
 knn_model = joblib.load('models/knn_model.pkl')
 
-
+lstm_model = LSTMModel(input_size=34148)
+lstm_state_dict = torch.load('models/lstm_model.pth', map_location=torch.device('cpu'))
+lstm_model.load_state_dict(lstm_state_dict)
+lstm_model.eval()
 
 def predict(image_path):
     features = extract_features(image_path)
@@ -20,7 +23,6 @@ def predict(image_path):
 
     features = features.reshape(1, -1)
 
-    # Predictions
     svm_raw = int(svm_model.predict(features)[0])
     knn_raw = int(knn_model.predict(features)[0])
     lstm_input = torch.tensor(features, dtype=torch.float32).unsqueeze(0)
@@ -33,12 +35,10 @@ def predict(image_path):
         'LSTM': lstm_raw,
     }
 
-    # Count votes
     counts = {0: 0, 1: 0}
     for pred in predictions.values():
         counts[pred] += 1
 
-    # Additional result
     if counts[0] > counts[1]:
         vis_img = visualize_difference(image_path)
         if vis_img:
